@@ -3,14 +3,27 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"os"
+	"strings"
 )
 
 func main() {
-	name := flag.String("user", "", "your name")
+	name := flag.String("user", "", "user name")
 	flag.Parse()
-	if *name == "" {
-		log.Fatal("--user flag is required")
+	fmt.Printf("user name is %s\n", *name)
+
+	var userArg string
+	for index, arg := range os.Args {
+		pattern := "-user="
+		x := strings.Index(arg, pattern)
+		if x > -1 {
+			userArg = arg[x+len(pattern):]
+			continue
+		}
+		if arg == "-user" || arg == "--user" {
+			userArg = os.Args[index+1]
+			continue
+		}
 	}
-	fmt.Printf("Your name is %s", *name)
+	fmt.Printf("user name is %s", userArg)
 }
