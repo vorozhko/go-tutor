@@ -32,6 +32,7 @@ func main() {
 					fmt.Printf("%s: %s\n", file.Name(), line)
 				} else {
 					fmt.Printf("Binary file %s matches\n", file.Name())
+					break
 				}
 
 			}
