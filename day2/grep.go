@@ -18,14 +18,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	for _, file := range files {
-
 		data, err := ioutil.ReadFile(file.Name())
-		fileType := http.DetectContentType(data)
 		if err != nil {
 			log.Fatal(err)
 		}
+		fileType := http.DetectContentType(data)
 		for _, line := range strings.Split(string(data), "\n") {
 			if strings.Index(line, *search) > -1 {
 				if strings.Index(fileType, "text/plain") > -1 {
@@ -34,7 +32,6 @@ func main() {
 					fmt.Printf("Binary file %s matches\n", file.Name())
 					break
 				}
-
 			}
 		}
 	}
