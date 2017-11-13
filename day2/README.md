@@ -1,13 +1,9 @@
 # grep utility #
-Search for a string in a given filepath 
+Search for a string in a given path
 
 # todo #
 - Recursive search might need recursion
 - refactor main part to function to support recursion
-
-# usage #
-- Input file path and string to search
-- Output file names which contain the string and match line
 
 # Notes #
 - Have to check for file type to detect binary files using http.DetectContentType function
