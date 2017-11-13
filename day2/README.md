@@ -6,5 +6,5 @@ Search for a string in a given path
 - refactor main part to function to support recursion
 
 # Notes #
-- Have to check for file type to detect binary files using http.DetectContentType function
-- strings.Index is doing all the work
+- http.DetectContentType have been very useful to check file type e.g. detect binary files
+- strings.Index is great for working with text
