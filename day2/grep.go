@@ -23,7 +23,7 @@ func main() {
 			//to do: traverse directories recursively
 			continue
 		}
-		data, err := ioutil.ReadFile(file.Name())
+		data, err := ioutil.ReadFile(*path + "/" + file.Name())
 		if err != nil {
 			log.Fatal(err)
 		}
