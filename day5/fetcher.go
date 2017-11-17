@@ -1,10 +1,11 @@
 package main
 
 //todo:
-// - every link must be visited only once
-// - keep a map of visited links
-// - fix links and page concatination e.g. https://golang.org/doc/blog//doc/tos.html
-// - extract domain from request uri to simplify crawling
+// - every link must be visited only once [done]
+// - keep a map of visited links [done]
+// - fix links and page concatination [done]
+// - extract domain from request uri to simplify crawling [done]
+// - rework how internal links are selected for crawling
 // - fix how crawling settings are set like depth and maxLinks
 
 import (
@@ -13,6 +14,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"golang.org/x/net/html"
 )
@@ -30,30 +32,19 @@ func main() {
 	}
 
 	visitedLinks[*baseURL] = false
-	messages := make(chan string)
-	go crawl("/", 0, 10, 10, messages)
 
-	for {
-		fmt.Print(<-messages)
-	}
+	//set parameters for crawling
+	crawl("/")
 }
 
-func printLinks(link string, c chan string) {
-	c <- fmt.Sprintf("Crawling %s ..................\n\n", link)
-}
-
-func crawl(link string, currentDepth, finalDepth, maxLinks int, c chan string) {
-	//mux.Lock()
+func crawl(link string) {
+	//check if link already visited
 	if visitedLinks[link] {
 		return
 	}
+	//set link as visited
 	visitedLinks[link] = true
-	//mux.Unlock()
-	if currentDepth == finalDepth {
-		return
-	}
-	printLinks(link, c)
-	//	fmt.Printf("Crawling %s ..................\n\n", *baseURL+link)
+	fmt.Printf("Crawling %s ..................\n\n", *baseURL+link)
 	resp, err := http.Get(*baseURL + link)
 	if err != nil {
 		log.Fatal(err)
@@ -61,20 +52,17 @@ func crawl(link string, currentDepth, finalDepth, maxLinks int, c chan string) {
 	defer resp.Body.Close()
 
 	linkCounter := 0
-	//todo: every link must be visited only once
 	for _, href := range getLinks(resp.Body) {
-		//crawl only internal links
-		if string(href[0]) == "/" && // only internal links
+		//todo: rework how links are selected
+		if len(href) > 0 && string(href[0]) == "/" && // only internal links
 			href != link { //skip current page
 			if len(href) > 1 && href[1] == '/' { //skip external links which start with //
 				continue
 			}
-			if linkCounter == maxLinks {
-				return
-			}
 			linkCounter++
 			//fmt.Printf("Found: %s\n", href)
-			crawl(href, currentDepth+1, finalDepth, maxLinks, c)
+			crawl(href)
+			time.Sleep(time.Second * 1)
 		}
 	}
 }
@@ -88,7 +76,6 @@ func getLinks(body io.Reader) []string {
 
 		switch tt {
 		case html.ErrorToken:
-			//todo: links list shoudn't contain duplicates
 			return links
 		case html.StartTagToken, html.EndTagToken:
 			token := z.Token()
