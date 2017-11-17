@@ -17,13 +17,12 @@ import (
 	"golang.org/x/net/html"
 )
 
+//hash of visited links to prevent double visit
 var visitedLinks map[string]bool
 var baseURL = flag.String("url", "", "start url")
 
 func main() {
 	visitedLinks = make(map[string]bool)
-
-	//timeout := flag.Int("timeout", 2, "number of seconds between requests")
 	flag.Parse()
 
 	if *baseURL == "" {
@@ -31,18 +30,30 @@ func main() {
 	}
 
 	visitedLinks[*baseURL] = false
-	crawl("/", 0, 10, 10)
+	messages := make(chan string)
+	go crawl("/", 0, 10, 10, messages)
+
+	for {
+		fmt.Print(<-messages)
+	}
 }
 
-func crawl(link string, currentDepth, finalDepth, maxLinks int) {
+func printLinks(link string, c chan string) {
+	c <- fmt.Sprintf("Crawling %s ..................\n\n", link)
+}
+
+func crawl(link string, currentDepth, finalDepth, maxLinks int, c chan string) {
+	//mux.Lock()
 	if visitedLinks[link] {
 		return
 	}
 	visitedLinks[link] = true
+	//mux.Unlock()
 	if currentDepth == finalDepth {
 		return
 	}
-	fmt.Printf("Crawling %s ..................\n\n", *baseURL+link)
+	printLinks(link, c)
+	//	fmt.Printf("Crawling %s ..................\n\n", *baseURL+link)
 	resp, err := http.Get(*baseURL + link)
 	if err != nil {
 		log.Fatal(err)
@@ -63,7 +74,7 @@ func crawl(link string, currentDepth, finalDepth, maxLinks int) {
 			}
 			linkCounter++
 			//fmt.Printf("Found: %s\n", href)
-			crawl(href, currentDepth+1, finalDepth, maxLinks)
+			crawl(href, currentDepth+1, finalDepth, maxLinks, c)
 		}
 	}
 }
