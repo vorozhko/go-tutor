@@ -1,3 +1,4 @@
+// Package helloworld - example of how to make a package
 package helloworld
 
 import "fmt"
