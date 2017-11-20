@@ -1,6 +1,6 @@
 package helloworld
 
-// SayName print str text with constant prefix Name - see in hello.go
+// SayName print str text with predefined prefix
 func SayName(str string) {
-	say(Name + str)
+	say(prefix + str)
 }

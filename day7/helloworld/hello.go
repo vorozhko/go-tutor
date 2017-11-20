@@ -2,8 +2,8 @@ package helloworld
 
 import "fmt"
 
-// Name - define default prefix for sayName function - see in world.go
-const Name = "Hello World!"
+// prefix - define default prefix
+const prefix = "Hello World!"
 
 // say - print string
 func say(str string) {
