@@ -26,6 +26,7 @@ func main() {
 	}
 	fmt.Printf("Total words: %d\n", count)
 	fmt.Printf("Words frequency: \n")
+	//todo: sort words by values for nice print
 	for k, v := range words {
 		fmt.Printf("%s:%d\n", k, v)
 	}
