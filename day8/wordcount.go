@@ -15,7 +15,9 @@ func main() {
 	//we ask scanner to split input by words for us
 	scanner.Split(bufio.ScanWords)
 	count := 0
+	//scan the inpurt
 	for scanner.Scan() {
+		//get input token - in our case a word and update it's frequence
 		words[scanner.Text()]++
 		count++
 	}
