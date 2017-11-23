@@ -11,3 +11,4 @@ As many developers know the best way to learn programming language is to use it.
  - day 6 - functional version of web crawler https://github.com/vorozhko/go-tutor/blob/master/day5/fetcher.go
  - day 7 - packages, files and imports in go https://github.com/vorozhko/go-tutor/tree/master/day7
  - day 8 - counting words frequency using stdin as input stream https://github.com/vorozhko/go-tutor/blob/master/day8/wordcount.go
+ - day 9 - transparent http proxy with filter by user agent and browser https://github.com/vorozhko/go-tutor/blob/master/day9/proxy.go
