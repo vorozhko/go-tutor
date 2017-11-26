@@ -35,8 +35,7 @@ func main() {
 // PrintEmployee - print data in nice format
 func PrintEmployee(e Employee) {
 	fmt.Printf("ID = %d\nName = %s\n", e.ID, e.Name)
-	//if ID is set than employee has a manager
-	//other way is to compare e.Manager to Employee{} type like if (Employee{}) == e.Manager  {
+	//if e.Manager is defined print manager data
 	if e.Manager != nil {
 		fmt.Printf("Manager of %s:\n", e.Name)
 		//recursively go through managers tree
