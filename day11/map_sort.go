@@ -7,7 +7,7 @@ import (
 
 func main() {
 	var m = make(map[string]int)
-	m["Sun"] = 70
+	m["Sun"] = 7
 	m["Sat"] = 6
 	m["Fri"] = 5
 	m["Thu"] = 4
