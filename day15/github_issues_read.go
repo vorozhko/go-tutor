@@ -9,15 +9,14 @@ import (
 )
 
 func main() {
-	token := flag.String("token", "", "github auth token")
 	repo := flag.String("repo", "", "github owner/repo e.g. golang/go")
 	id := flag.Int("id", -1, "issue id")
 	flag.Parse()
 
-	if *token == "" || *id == -1 || *repo == "" {
-		log.Fatal("--token, --repo and --id parameters must be provided")
+	if *id == -1 || *repo == "" {
+		log.Fatal("--repo and --id parameters must be provided")
 	}
-	issue, _ := read(*repo, *id, *token)
+	issue, _ := read(*repo, *id)
 	fmt.Print(issue.Title)
 }
 
@@ -27,9 +26,8 @@ type IssueData struct {
 	Body  string `json:"body"`
 }
 
-func read(ownerRepo string, id int, token string) (*IssueData, error) {
+func read(ownerRepo string, id int) (*IssueData, error) {
 	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/issues/%d", ownerRepo, id)
-	fmt.Println(apiURL)
 	resp, err := http.Get(apiURL)
 	if err != nil {
 		log.Fatal(err)
